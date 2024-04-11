@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/GameResources/Scenes/ResultScene.unity
+    guid: 30d54fc0ad8cc2643bce0fd1d0c378dd
+  - enabled: 1
+    path: Assets/GameResources/Scenes/GameScene_Gun.unity
+    guid: f6107e127dc0c0f40b5a9e1fbc4bbfa4
+  - enabled: 1
+    path: Assets/GameResources/Scenes/GameScene_Jump.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/GameResources/Scenes/MainScene.unity
+    guid: df742c965a3252547aeb7ab526dccf64
   m_configObjects: {}

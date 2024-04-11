@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 public class ExCubePlayer : MonoBehaviour
 {
     public Text TextUI = null;
@@ -11,12 +13,20 @@ public class ExCubePlayer : MonoBehaviour
 
     public int Point = 0;
     public float checkTime = 0.0f;
+    public float checkEndTime = 30.0f;
 
     public Rigidbody m_Rigidbody;
 
     // Update is called once per frame
     void Update()
     {
+        checkEndTime -= Time.deltaTime;
+
+        if(checkEndTime <= 0)
+        {
+            PlayerPrefs.SetInt("Point", Point);
+            SceneManager.LoadScene("ResultScene");
+        }
 
         checkTime += Time.deltaTime;
         if (checkTime >= 1.0f)
