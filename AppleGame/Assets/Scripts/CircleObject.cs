@@ -8,12 +8,26 @@ public class CircleObject : MonoBehaviour
     public bool isUsed;
     Rigidbody2D rigidbody2D;
 
+    public int index;
+
+    public float EndTime = 0.0f;
+    public SpriteRenderer spriteRenderer;
+
+    public GameManager gameManager;
+
+    void Awake()
+    {
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        isUsed = false;
+        rigidbody2D.simulated = false;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        isUsed = false;
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        rigidbody2D.simulated = false;
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -52,10 +66,66 @@ public class CircleObject : MonoBehaviour
         isUsed = true; 
         rigidbody2D.simulated = true;
 
-        GameObject temp = GameObject.FindWithTag("GameManger");
-        if(temp != null)
+        gameManager.GenObject();
+
+    }
+
+    public void Used()
+    {
+        isDrag = false;
+        isUsed = true;
+        rigidbody2D.simulated = true;
+    }
+
+    public void OnTriggerStay2D (Collider2D collision)
+    {
+        if(collision.tag == "EndLine")
         {
-            temp.gameObject.GetComponent<GameManager>().GenObject();
+            EndTime += Time.deltaTime;
+
+            if (EndTime > 1)
+            {
+                spriteRenderer.color = new Color(0.9f, 0.2f, 0.2f);
+            }
+            if (EndTime > 3)
+            {
+                //Debug.Log("게임 종료");
+                gameManager.EndGame();
+            }
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "EndLine")
+        {
+            EndTime = 0.0f;
+            spriteRenderer.color = Color.white;
+        }
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (index >= 7)
+            return;
+
+        if (collision.gameObject.tag == "Fruit")
+        {
+            CircleObject temp = collision.gameObject.GetComponent<CircleObject>();
+
+            if(temp.index == index)
+            {
+                if(gameObject.GetInstanceID() > collision.gameObject.GetInstanceID())
+                {
+                    //GameManager에서 합친 오브젝트를 생성
+
+                    gameManager.MergeObject(index, gameObject.transform.position);
+
+
+                    Destroy(temp.gameObject);
+                    Destroy(gameObject);
+                }
+            }
         }
     }
 }
